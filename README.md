@@ -65,7 +65,7 @@ Run
 1st Setup  to generate the config.ini
 
 Start the container with an interactive shell
-```docker run --rm -ti --user `id -u`:`id -g` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash```
+```docker run --rm -ti --user \`id -u\`:\`id -g\` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash```
 
 Follow the setup instructions from above. This will generate the config.ini in the /build directory of the container.
 Copy the config.ini to the mounted /opt directory:
@@ -74,9 +74,11 @@ Copy the config.ini to the mounted /opt directory:
 
 ### using the Container
 
-call the script inside the container with an pre-existing config.ini (which will be mounted into the conainer)
+once the setup is done and a config.ini exists the Container can be called to sync the data between Withings and the target service. The default is to sync with Garmin.
 
-```docker run -ti --user `id -u`:`id -g` -v $PWD/config.ini:/build/config.ini desiredcontainername ./nokia-weight-sync.py sync garmin```
+```docker run -ti --user \`id -u\`:\`id -g\` -v $PWD/config.ini:/build/config.ini desiredcontainername
+Last measurement was already synced
+Config file saved to config.ini```
 
 Please not that the config.ini is written to during the sync. So it must be writeable to the user inside the container.
 
