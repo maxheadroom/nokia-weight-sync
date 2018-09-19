@@ -57,28 +57,39 @@ The Dockfile contains instructions to build a Docker container with this code wh
 
 ### building the Container
 
-Run
-
-```docker build -t <desiredcontainername> .```
+Run the docker build command, assuming you're in the root of your working copy of this repo.
 
 
-1st Setup  to generate the config.ini
+```
+docker build -t <desiredcontainername> .
+```
+
+
+### 1st Setup  to generate the config.ini
 
 Start the container with an interactive shell
-```docker run --rm -ti --user \`id -u\`:\`id -g\` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash```
+
+```
+docker run --rm -ti --user \`id -u\`:\`id -g\` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash
+```
 
 Follow the setup instructions from above. This will generate the config.ini in the /build directory of the container.
 Copy the config.ini to the mounted /opt directory:
 
-```I have no name!@81cb3fe1890e:/build$cp /build/config.ini /opt/```
+```
+I have no name!@81cb3fe1890e:/build$cp /build/config.ini /opt/
+```
 
 ### using the Container
 
 once the setup is done and a config.ini exists the Container can be called to sync the data between Withings and the target service. The default is to sync with Garmin.
 
-```docker run -ti --user \`id -u\`:\`id -g\` -v $PWD/config.ini:/build/config.ini desiredcontainername
+```
+docker run -ti --user \`id -u\`:\`id -g\` -v $PWD/config.ini:/build/config.ini desiredcontainername
+
 Last measurement was already synced
-Config file saved to config.ini```
+Config file saved to config.ini
+```
 
 Please not that the config.ini is written to during the sync. So it must be writeable to the user inside the container.
 
