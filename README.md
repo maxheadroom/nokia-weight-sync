@@ -76,7 +76,7 @@ Copy the config.ini to the mounted /opt directory:
 
 call the script inside the container with an pre-existing config.ini (which will be mounted into the conainer)
 
-```docker run -ti --user `id -u`:`id -g` -v $PWD/config.ini:/build/config.ini maxheadroom/withings-garminconnect ./nokia-weight-sync.py sync garmin```
+```docker run -ti --user `id -u`:`id -g` -v $PWD/config.ini:/build/config.ini desiredcontainername ./nokia-weight-sync.py sync garmin```
 
 Please not that the config.ini is written to during the sync. So it must be writeable to the user inside the container.
 
