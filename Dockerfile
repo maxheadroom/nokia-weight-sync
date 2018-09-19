@@ -9,3 +9,4 @@ RUN mkdir /build
 COPY . /build
 WORKDIR /build
 RUN pip3 install -r requirements.txt
+ENTRYPOINT ["/build/nokia-weight-sync.py", "sync", "garmin"]
