@@ -11,7 +11,7 @@ Get weight from Nokia Health and update to Garmin Connect or Smashrun.
 
     - Python 3.X
     - Python libraries: arrow, requests, requests-oauthlib
-    
+
 3. [Register](https://account.health.nokia.com/partner/add_oauth2) an application with Nokia Health and obtain a consumer key and secret.
     1. logo: the requirements are quite strict, [feel free to use this one](https://github.com/magnific0/nokia-weight-sync/blob/master/logo256w.png)
     1. callback: you can pick anything, but if you want to do the automated authorization (you will be prompted for this), you need to pick the hostname/ip and port carefully. For example http://localhost:8087.
@@ -24,7 +24,7 @@ Get weight from Nokia Health and update to Garmin Connect or Smashrun.
 1. On first run you need to set-up your Nokia Health consumer key and secret:
 
         ./nokia-weight-sync.py -k CONSUMER_KEY -s CONSUMER_SECRET setup nokia
-        
+
 2. Follow the instructions on the screen and verify the application.
 
 3. Register one or more destination services:
@@ -32,24 +32,54 @@ Get weight from Nokia Health and update to Garmin Connect or Smashrun.
     - **Garmin Connect:** register your Garmin Connect credentials and sync your last measurement (provide GC password when asked):
 
             ./nokia-weight-sync.py -k user@example.com setup garmin
-            
+
     - **Smashrun (implicit flow, recommended):** for user level authentication simply copy the access token (no registration, no refresh after expiry):
-    
+
             ./nokia-weight-sync.py setup smashrun
-            
+
     - **Smashrun (code flow):** register Smashrun API application keys and follow the authorization process to obtain your users refresh_token ([registration required](https://api.smashrun.com/register), refresh after expiry):
-    
+
             ./nokia-weight-sync.py -k CLIENT_ID -s CLIENT_SECRET setup smashrun_code
-            
+
 4. Verify that the relevant sections for the services are added to ```config.ini```.
-        
+
 5. Synchronize (new) measurements:
 
         ./nokia-weight-sync.py sync garmin
         ./nokia-weight-sync.py sync smashrun
-        
+
 **Important** Nokia Health API, Smashrun API, and Garmin Connect credentials are stored in ```config.ini```. If this file is compromised your Garmin Connect account, personal health data from Nokia Health, and activity data from Smashrun are at risk.
-        
+
+
+
+## Docker Container Usage
+The Dockfile contains instructions to build a Docker container with this code which you can run on any host without worrying about the Python an Pip dependencies.
+
+### building the Container
+
+Run
+
+```docker build -t <desiredcontainername> .```
+
+
+1st Setup  to generate the config.ini
+
+Start the container with an interactive shell
+```docker run --rm -ti --user `id -u`:`id -g` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash```
+
+Follow the setup instructions from above. This will generate the config.ini in the /build directory of the container.
+Copy the config.ini to the mounted /opt directory:
+
+```I have no name!@81cb3fe1890e:/build$cp /build/config.ini /opt/```
+
+### using the Container
+
+call the script inside the container with an pre-existing config.ini (which will be mounted into the conainer)
+
+```docker run -ti --user `id -u`:`id -g` -v $PWD/config.ini:/build/config.ini maxheadroom/withings-garminconnect ./nokia-weight-sync.py sync garmin```
+
+Please not that the config.ini is written to during the sync. So it must be writeable to the user inside the container.
+
 ## Advanced
 
 See ```./nokia-weight-sync.py --help``` for more information.
