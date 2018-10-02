@@ -70,7 +70,7 @@ docker build -t <desiredcontainername> .
 Start the container with an interactive shell
 
 ```
-docker run --rm -ti --user `id -u`:`id -g` -p9090:9090 -v $PWD:/opt desiredcontainername /bin/bash
+docker run --rm -ti --user `id -u`:`id -g` -p9090:9090 -v $PWD:/opt --entrypoint /bin/bash desiredcontainername 
 ```
 
 Follow the setup instructions from above. This will generate the config.ini in the /build directory of the container.
